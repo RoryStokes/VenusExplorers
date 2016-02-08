@@ -21,24 +21,25 @@ class Explorer:
 	def turnLeft(self):
 		#multiply direction vector by rotation matrix
 		self.direction = _left.dot(self.direction)
+		return True
 
 	def turnRight(self):
 		#multiply direction vector by rotation matrix
 		self.direction = _right.dot(self.direction)
+		return True
 
 	def move(self):
 		#add the current direction vector to position
 		target = self.pos + self.direction
-
-		#test to see if new position is within bounds
-		if (target>self.bounds[2:3]).any() or (target<self.bounds[0:1]).any():
-			#if not, output an error and make no movement
+		#move the explorer, but keep within bounds
+		self.pos = numpy.clip(target,self.bounds[0:2],self.bounds[2:4])
+		#test to see if movement was allowed
+		if not numpy.array_equal(self.pos,target):
+			#if not, output an error
 			print("Error: movement out of bounds")
 			return False
-		else:
-			#if position within bounds, make the movement
-			self.pos = target
-			return True
+
+		return True
 
 	def getX(self):
 		#returns the x component of the current position
