@@ -93,4 +93,15 @@ outputFormat = "%d %d %s"
 
 #iterate through the explorers in the list
 for explorer in explorers:
-	print(outputFormat % (explorer.getX(), explorer.getY(), explorer.getFacing()))
+	#load explorer state
+	x = explorer.getX()
+	y = explorer.getY()
+	facing = explorer.getFacing()
+
+	#confirm getFacing has returned successfully
+	if not facing:
+		print("Error: Invalid explorer data, terminating".format(lineNumber))
+		sys.exit(1)
+
+	#output formatted string
+	print(outputFormat % (x, y, facing))
