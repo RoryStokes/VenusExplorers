@@ -1,5 +1,5 @@
 from explorer import Explorer
-import sys, re
+import sys, re, numpy
 
 
 #defining regular expressions to read in each of the 3 different input line types
@@ -21,8 +21,11 @@ if match is None:
 #extract the grid size from the line. these values are not currently used
 right  = int(match.group(1))
 top    = int(match.group(2))
-#store grid bounds as a tuple
-bounds = (0,0,right,top)
+
+#initialise an array of booleans to indicate which grid cells contain explorers
+grid   = numpy.full((right,top),False,dtype=bool)
+
+
 
 #############################
 # SUBSEQUENT LINES OF INPUT #
@@ -78,11 +81,15 @@ for line in sys.stdin:
 		else:
 			#Since the line matched the move pattern, the only other option is moving
 			success = currentExplorer.move() 
+			if currentExplorer.collided():
+				print("Warning: Explorer passed through an occupied cell during the instructions in line {}. Possible collision between explorers".format(lineNumber))
 
 		if not success:
 			print("Error: Invalid instruction in line {}, terminating".format(lineNumber))
 			sys.exit(1)
 
+	#set final grid cell as occupied
+	grid[currentExplorer.getX(),currentExplorer.getY()] = True
 
 ##########
 # OUTPUT #

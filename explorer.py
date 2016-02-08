@@ -8,11 +8,11 @@ _right = numpy.array([[0,1],[-1,0]])
 
 class Explorer:
 
-	def __init__(self,x,y,facing,bounds):
+	def __init__(self,x,y,facing,grid):
 		#position is stored in a numpy array for efficient modification
 		self.pos    = numpy.array((x,y))
-		#grid bounds are stored to ensure explorer does not leave grid
-		self.bounds = numpy.array(bounds)
+		#stores a reference to the grid
+		self.grid = grid
 
 		if facing in _directions.keys():
 			#sets the direction to a unitary vector in the target direction, fetched from the cardinal direction directory
@@ -32,7 +32,7 @@ class Explorer:
 		#add the current direction vector to position
 		target = self.pos + self.direction
 		#move the explorer, but keep within bounds
-		self.pos = numpy.clip(target,self.bounds[0:2],self.bounds[2:4])
+		self.pos = numpy.clip(target,(0,0),self.grid.shape())
 		#test to see if movement was allowed
 		if not numpy.array_equal(self.pos,target):
 			#if not, output an error
@@ -40,6 +40,9 @@ class Explorer:
 			return False
 
 		return True
+
+	def collided(self):
+		return self.grid[self.pos]
 
 	def getX(self):
 		#returns the x component of the current position
