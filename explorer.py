@@ -55,4 +55,4 @@ class Explorer:
 				return char
 		#if no matches are found (should not be possible), display an error
 		print("Error: facing in non-cardinal direction")
-		return 'X'
+		return False

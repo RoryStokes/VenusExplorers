@@ -72,14 +72,16 @@ for line in sys.stdin:
 	#iterate through each character and call relevant method on explorer object
 	for char in line:
 		if char == "L":
-			currentExplorer.turnLeft()
+			success = currentExplorer.turnLeft()
 		elif char == "R":
-			currentExplorer.turnRight()
+			success = currentExplorer.turnRight()
 		else:
 			#Since the line matched the move pattern, the only other option is moving
-			if currentExplorer.move() is False:
-				print("Error: Invalid movement in line {}, terminating".format(lineNumber))
-				sys.exit(1)
+			success = currentExplorer.move() 
+
+		if not success:
+			print("Error: Invalid instruction in line {}, terminating".format(lineNumber))
+			sys.exit(1)
 
 
 ##########
